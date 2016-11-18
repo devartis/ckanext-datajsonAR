@@ -16,9 +16,42 @@ class Package2Pod:
 
     seen_identifiers = None
 
+
     @staticmethod
     def wrap_json_catalog(dataset_dict, json_export_map):
-        catalog_headers = [(x, y) for x, y in json_export_map.get('catalog_headers').iteritems()]
+
+        import ckanext.gobar_theme.helpers as gobar_helpers
+        site_title = gobar_helpers.get_theme_config("title.site-title", "")
+        mbox = gobar_helpers.get_theme_config("social.mail", "")
+        site_description = gobar_helpers.get_theme_config("title.site-description", "")
+        superThemeTaxonomy = "http://datos.gob.ar/superThemeTaxonomy.json"
+        import ckan.logic as logic
+        from ckan.common import c
+        import ckan.model as model
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': c.user or c.author
+        }
+        data_dict_page_results = {
+            'all_fields': True,
+            'type': 'group',
+            'limit': None,
+            'offset': 0,
+        }
+        my_themes = []
+        for theme in logic.get_action('group_list')(context, data_dict_page_results):
+            my_themes.append({'id': theme['name'],
+                              'description': theme['description'],
+                              'label': theme['display_name']
+                              })
+        catalog_headers = [("title", site_title),
+                           ("desciption", site_description),
+                           ("superThemeTaxonomy", superThemeTaxonomy),
+                           ("publisher", {"name": "Ministerio de Modernizacion[HARDCODED]",
+                                          "mbox": mbox}),
+                           ("themeTaxonomy", my_themes)]
+        # catalog_headers = [(x, y) for x, y in json_export_map.get('catalog_headers').iteritems()]
         catalog = OrderedDict(
             catalog_headers + [('dataset', dataset_dict)]
         )

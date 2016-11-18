@@ -184,7 +184,47 @@ class DataJsonController(BaseController):
                 # None, {'limit': 50, 'page': 300})
                 packages = DataJsonController._get_ckan_datasets()
                 # packages = p.toolkit.get_action("current_package_list_with_resources")(None, {})
+            tags = []
+            themes = []
 
+            import re
+            for i in range(0, len(packages)):
+                j = 0
+                for extra in packages[i]['extras']:
+                    if extra['key'] == 'language':
+                        packages[i]['extras'][j]['value'] = json.loads(extra['value'])
+                    elif extra['key'] == 'globalGroups':
+                        packages[i]['extras'][j]['value'] = json.loads(extra['value'])
+                    j += 1
+                try:
+                    fixed_attrDesc = json.loads(packages[i]['resources'][0]['attributesDescription'])
+                    packages[i]['resources'][0]['attributesDescription'] = fixed_attrDesc
+                except KeyError:
+                    pass
+                ckan_host = ''
+                try:
+                    ckan_host = re.match(
+                        r'(?:http)s?:\/\/([\w][^\/=\s]+)\/?|(^w{3}[\.\w][^\/\=\s]{2,})\/?',
+                        packages[i]['resources'][0]['url']).group(0)
+                except Exception:
+                    pass
+                try:
+                    for theme in packages[i]['groups']:
+                        themes.append(theme['title'])
+                except KeyError:
+                    pass
+                try:
+                    for tag in packages[i]['tags']:
+                        tags.append(tag['display_name'])
+                except KeyError:
+                    pass
+                # packages[i] = json.loads(packages[i][0]['extras']['language'])
+                packages[i]['groups'] = themes
+                packages[i]['tags'] = tags
+                if len(packages[i]['url']) < 1:
+                    packages[i]['url'] = '{host}/dataset/{dataset_id}'.format(
+                        host=ckan_host[:-1],
+                        dataset_id=packages[i]['name'])
             json_export_map = get_export_map_json('export.map.json')
 
             if json_export_map:
