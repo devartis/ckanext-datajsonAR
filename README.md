@@ -16,7 +16,7 @@ Instalacion:
 	(ckan_pyenv) $ pip install pyyaml lepl jsonschema rfc3987
 	(ckan_pyenv) $ pip install -e git+https://github.com/datosgobar/ckanext-datajson.git#egg=ckanext-datajson
 
-Luego, dentro de su archivo de configuracion de CKAN, normalmente alojado en `/etc/ckan/default/config_name.ini`, agraar la sigiente linea a ckan.plugin
+Luego, dentro de su archivo de configuracion de CKAN, normalmente alojado en `/etc/ckan/default/config_name.ini`, agregar la sigiente linea en la seccion de `[plugins]` a `ckan.plugins`
 
 	ckan.plugins = (otros plugins) datajson
 
