@@ -197,8 +197,9 @@ class DataJsonController(BaseController):
                         packages[i]['extras'][j]['value'] = json.loads(extra['value'])
                     j += 1
                 try:
-                    fixed_attrDesc = json.loads(packages[i]['resources'][0]['attributesDescription'])
-                    packages[i]['resources'][0]['attributesDescription'] = fixed_attrDesc
+                    for j in range(0, len(packages[i]['resources'])):
+                        fixed_attrDesc = json.loads(packages[i]['resources'][j]['attributesDescription'])
+                        packages[i]['resources'][j]['attributesDescription'] = fixed_attrDesc
                 except KeyError:
                     pass
                 ckan_host = ''
