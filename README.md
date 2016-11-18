@@ -24,4 +24,5 @@ Change-Log:
 ==========
 + Cambio 1
 + Cambio 2
++ ...
 + Cambio n
