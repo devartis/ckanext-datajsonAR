@@ -4,8 +4,11 @@ La extensión de CKAN `datajsonAR`, fue confeccionada dentro del marco del plan 
 Este desarrollo es un fork del trabajo realizado por la [GSA](https://github.com/GSA), con la extensión para CKAN, [GSA/ckanext-datajson](https://github.com/GSA/ckanext-datajson)
 
 
-+ [Instalacion de la Extensión](#instalacion-de-la-extensión)
++ [Instalación](#instalacion-de-la-extensión)
     + [Pre requisitos](#pre-requisitos)
+    + [Proceso de instalación de la extensión datajsonAR](#proceso-de-instalacion-de-la-extension-datajsonar)
+    + [Probado que todo funciona](#probado-que-todo-funciona)
++ [Usage](#usage)
 
 ##### Instalación de la Extensión:
 ###### Pre requisitos:
