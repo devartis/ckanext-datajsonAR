@@ -38,7 +38,7 @@ Instalación de la Extensión:
 Dentro del apartado `[app:main]` de la configuracion de CKAN `(/etc/ckan/default/ckan_config.ini)` agregar los siguientes campos:
 ```bash
 [app:main]
-ckan.owner = entidad-responsable-del-portal
+ckan.owner = entidad-responsable-del-portal # Admite espacios en blanco entre palabras
 ckan.owner.email = mail@entidad-responsable-del-portal.xxx # si este campo no se define, esta info se tomara del area de "contacto" de GobAr-Theme
 ```
 Luego, dentro de su archivo de configuracion de CKAN, normalmente alojado en `/etc/ckan/default/config_name.ini`, agregar la siguiente linea en la sección de `[plugins]` a `ckan.plugins`
