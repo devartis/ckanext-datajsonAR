@@ -11,7 +11,7 @@
 	+ Python
 		+ version: 2.7.12
 		+ github: https://github.com/python/pythondotorg
-		+ Documentation: https://www.python.org/doc/
+		+ Documentation: https://www.python.org/doc/	
 
 	+ Harvest
 		+ version: 1.0
