@@ -18,7 +18,7 @@ Indice:
 
 
 
-#### Instalación de la Extensión:
+Instalación de la Extensión:
 ---
 
 ###### Pre requisitos:
@@ -45,7 +45,7 @@ Luego, dentro de su archivo de configuracion de CKAN, normalmente alojado en `/e
 
 	ckan.plugins = (otros plugins) datajson
 
-#### Probado que todo funciona:
+Probado que todo funciona:
 ---
 Para saber que el proceso de instalación se realizo con exito, solo debemos tipear, en un navegador:
 	
@@ -67,7 +67,7 @@ Y deberíamos ver una respuesta similar a esta:
 ```
 
 
-#### Usage:
+Usage:
 ---
 Configurar la url de salida para nuestro `/data.json`, debebos agregar las sigientes lineas dentro del archivo de configuracion 
 de CKAN`[/etc/ckan/default/ckan-config.ini]`
@@ -83,7 +83,7 @@ Para habilitar o deshabilitar por configuracion la visibilidad del `/data.json`,
 
 
 
-#### Tests:
+Tests:
 ---
 *WIP*
 
