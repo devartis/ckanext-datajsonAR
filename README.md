@@ -47,8 +47,8 @@ Y deberíamos ver una respuesta similar a esta:
         "mbox": "email@decontacto.xxx",
         "name": "Nombre de la persona o institución responsable de la instancia CKAN."
 },
-"themeTaxonomy": [],
-"dataset": []
+	"themeTaxonomy": [],
+	"dataset": []
 }
 ```
 ##### Usage:
