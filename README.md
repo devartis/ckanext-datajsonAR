@@ -22,6 +22,12 @@ Este desarrollo es un fork del trabajo realizado por la [GSA](https://github.com
 (ckan_pyenv) $ pip install pyyaml lepl jsonschema rfc3987
 (ckan_pyenv) $ pip install -e git+https://github.com/datosgobar/ckanext-datajson.git#egg=ckanext-datajson
 ```
+Dentro del apartado `[app:main]` de la configuracion de CKAN `(/etc/ckan/default/ckan_config.ini)` agregar los siguientes campos:
+	
+	[app:mail]
+	ckan.owner = entidad-responsable-del-portal
+	ckan.owner.email = mail@entidad-responsable-del-portal.xxx # si este campo no se define, esta info se tomara del area de "contacto" de GobAr-Theme
+
 Luego, dentro de su archivo de configuracion de CKAN, normalmente alojado en `/etc/ckan/default/config_name.ini`, agregar la siguiente linea en la sección de `[plugins]` a `ckan.plugins`
 
 	ckan.plugins = (otros plugins) datajson
