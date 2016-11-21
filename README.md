@@ -24,7 +24,7 @@ Instalación de la Extensión:
 ###### Pre requisitos:
 + Python 2.7.x 
 + CKAN 2.5.2
-+ ckanext [gobAR-Theme](https://github.com/gobabiertoAR/distribuible.datos.gob.ar)
++ ckanext [gobAR-Theme](https://github.com/gobabiertoAR/portal-andino-theme)
 + ckanext [Hierarchy](https://github.com/datagovuk/ckanext-hierarchy)
 + ckanext [Harvest](https://github.com/ckan/ckanext-harvestt)
 
@@ -37,7 +37,7 @@ Instalación de la Extensión:
 ```
 Dentro del apartado `[app:main]` de la configuracion de CKAN `(/etc/ckan/default/ckan_config.ini)` agregar los siguientes campos:
 ```bash
-[app:mail]
+[app:main]
 ckan.owner = entidad-responsable-del-portal
 ckan.owner.email = mail@entidad-responsable-del-portal.xxx # si este campo no se define, esta info se tomara del area de "contacto" de GobAr-Theme
 ```
