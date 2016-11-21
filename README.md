@@ -66,7 +66,7 @@ Configurar la url de salida para nuestro `/data.json`, debebos agregar las sigie
 	ckanext.datajson.path = /data.json
 	ckanext.datajsonld.id = http://www.tuagencia.gob.ar/data.json
 
-Para habilitar o deshabilitar por configuracion, sin tener que quitar el plugin, agregaremos dentro del archivo de configuracion de CKAN`[/etc/ckan/default/ckan-config.ini]` la siguiente sentencia:
+Para habilitar o deshabilitar por configuracion la visibilidad del `/data.json`, sin tener que quitar el plugin, agregaremos dentro del archivo de configuracion de CKAN`[/etc/ckan/default/ckan-config.ini]` la siguiente sentencia:
 	
 	# False, no se mostrara http://{tu-host}/data.json
 	# True, se muestra http://{tu-host}/data.json
