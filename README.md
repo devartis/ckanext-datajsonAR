@@ -98,4 +98,4 @@ Este proyecto es en desarrollo, si viste algun `bug`, por favor, [creanos un iss
 
 Comentarios o preguntas?
 ---
-Escribinos a `datos@modernizacion.gob.ar`
+Escribinos a [datos@modernizacion.gob.ar](mailto:datos@modernizacion.gob.ar)
