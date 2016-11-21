@@ -64,4 +64,4 @@ El presente desarrollo es un fork del trabajo de la [GSA](link), [GSA/ckanext-da
 Este proyecto es en desarrollo, si viste algun `bug`, por favor, **creanos un issue**.
 
 ##### Comentarios o preguntas?
-*Escribinos a `datos@modernizacion.gob.ar`* 
+Escribinos a `datos@modernizacion.gob.ar`
