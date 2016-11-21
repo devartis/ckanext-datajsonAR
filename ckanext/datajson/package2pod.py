@@ -40,6 +40,26 @@ class Package2Pod:
             'offset': 0,
         }
         my_themes = []
+        from os import path, environ
+        from ConfigParser import ConfigParser
+        ckan_owner = ''
+        ckan_owner_email = ''
+        if 'CKAN_CONFIG' in environ:
+            if path.exists(environ['CKAN_CONFIG']):
+                tmp_ckan_config = ConfigParser()
+                tmp_ckan_config.read(environ['CKAN_CONFIG'])
+                try:
+                    ckan_owner = tmp_ckan_config.get('app:main', 'ckan.owner')
+                    print ckan_owner
+                except Exception, e:
+                    print e
+                try:
+                    tmp_mbox = tmp_ckan_config.get('app:main', 'ckan.owner.email')
+                    if len(tmp_mbox) > 0:
+                        mbox = tmp_mbox
+                except Exception:
+                    pass
+
         for theme in logic.get_action('group_list')(context, data_dict_page_results):
             my_themes.append({'id': theme['name'],
                               'description': theme['description'],
@@ -48,7 +68,7 @@ class Package2Pod:
         catalog_headers = [("title", site_title),
                            ("desciption", site_description),
                            ("superThemeTaxonomy", superThemeTaxonomy),
-                           ("publisher", {"name": "Ministerio de Modernizacion[HARDCODED]",
+                           ("publisher", {"name": ckan_owner,
                                           "mbox": mbox}),
                            ("themeTaxonomy", my_themes)]
         # catalog_headers = [(x, y) for x, y in json_export_map.get('catalog_headers').iteritems()]
