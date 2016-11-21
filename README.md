@@ -6,7 +6,7 @@ Este desarrollo es un fork del trabajo realizado por la [GSA](https://github.com
 Indice:
 ======
 + [Presentacion](#ckanext-datajsonar)
-+ [Instalación](#instalacion-de-la-extensión)
++ [Instalación](#instalacion-de-la-extension)
     + [Pre requisitos](#pre-requisitos)
     + [Proceso de instalación de la extensión datajsonAR](#proceso-de-instalacion-de-la-extension-datajsonar)
     + [Probado que todo funciona](#probado-que-todo-funciona)
