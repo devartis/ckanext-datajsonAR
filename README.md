@@ -23,7 +23,7 @@ Este desarrollo es un fork del trabajo realizado por la [GSA](https://github.com
 (ckan_pyenv) $ pip install -e git+https://github.com/datosgobar/ckanext-datajson.git#egg=ckanext-datajson
 ```
 Dentro del apartado `[app:main]` de la configuracion de CKAN `(/etc/ckan/default/ckan_config.ini)` agregar los siguientes campos:
-```python
+```bash
 [app:mail]
 ckan.owner = entidad-responsable-del-portal
 ckan.owner.email = mail@entidad-responsable-del-portal.xxx # si este campo no se define, esta info se tomara del area de "contacto" de GobAr-Theme
