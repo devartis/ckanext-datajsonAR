@@ -6,7 +6,7 @@ Este desarrollo es un fork del trabajo realizado por la [GSA](https://github.com
 Indice:
 ------
 + [Presentacion](#ckanext-datajsonar)
-+ [Instalación](##instalación-de-la-extensión)
++ [Instalación](#instalación-de-la-extensión)
     + [Pre requisitos](#pre-requisitos)
     + [Proceso de instalación de la extensión datajsonAR](#proceso-de-instalación-de-la-extensión-datajsonar)
     + [Probado que todo funciona](#probado-que-todo-funciona)
@@ -88,14 +88,14 @@ Tests:
 *WIP*
 
 
-#### Credits / Copying
+Credits / Copying
 ---
 El presente desarrollo es un fork del trabajo de la [GSA](link), [GSA/ckanext-datajson](https://github.com/GSA/ckanext-datajson) y podes visitarlo [Aquí](https://github.com/GSA/ckanext-datajson/blob/master/README.md) (EN).
 
-#### Contacto:
+Contacto:
 ---
 Este proyecto es en desarrollo, si viste algun `bug`, por favor, **creanos un issue**.
 
-#### Comentarios o preguntas?
+Comentarios o preguntas?
 ---
 Escribinos a `datos@modernizacion.gob.ar`
