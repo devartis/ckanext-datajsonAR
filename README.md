@@ -1,5 +1,5 @@
-ckanext-datajsonAR
-==================
+# ckanext-datajsonAR
+--------------------
 La extensión de CKAN `datajsonAR`, fue confeccionada dentro del marco del plan de `Datos Abiertos` de la República Argentina e incluida dentro del proyecto [portal andino](https://github.com/datosgobar/portal-andino), en función de que el mismo pueda asi cumplir con estándares de calidad para la confección de metadata para catálogos de datos [DCAT](https://www.w3.org/TR/vocab-dcat) propuestos por la World Wide Web Consortium([W3C](www.w3c.es)). 
 Este desarrollo es un fork del trabajo realizado por la [GSA](https://github.com/GSA), con la extensión para CKAN, [GSA/ckanext-datajson](https://github.com/GSA/ckanext-datajson)
 
