@@ -4,7 +4,7 @@ La extensión de CKAN `datajsonAR`, fue confeccionada dentro del marco del plan 
 Este desarrollo es un fork del trabajo realizado por la [GSA](https://github.com/GSA), con la extensión para CKAN, [GSA/ckanext-datajson](https://github.com/GSA/ckanext-datajson)
 
 Indice:
-======
+------
 + [Presentacion](#ckanext-datajsonar)
 + [Instalación](#instalacion-de-la-extension)
     + [Pre requisitos](#pre-requisitos)
@@ -61,8 +61,16 @@ Y deberíamos ver una respuesta similar a esta:
 }
 ```
 ##### Usage:
-Customizacion....
+Configurar la url de salida para nuestro `/data.json`, debebos agregar las sigientes lineas dentro del archivo de configuracion de CKAN`[/etc/ckan/default/ckan-config.ini]`
 
+	ckanext.datajson.path = /data.json
+	ckanext.datajsonld.id = http://www.tuagencia.gob.ar/data.json
+
+Para habilitar o deshabilitar por configuracion, sin tener que quitar el plugin, agregaremos dentro del archivo de configuracion de CKAN`[/etc/ckan/default/ckan-config.ini]` la siguiente sentencia:
+	
+	# False, no se mostrara http://{tu-host}/data.json
+	# True, se muestra http://{tu-host}/data.json
+    ckanext.datajson.url_enabled = False 
 
 ##### Tests:
 *WIP*
