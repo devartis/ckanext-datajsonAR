@@ -1,54 +1,61 @@
 ckanext-datajsonAR
-================
-Descripcion Narrativa de contexto y dependencias
-parte del proyecto (portal_andino)[link_a_portal_andino]
+==================
+La extensión de CKAN `datajsonAR`, fue confeccionada dentro del marco del plan de `Datos Abiertos` de la República Argentina e incluida dentro del proyecto [portal andino](https://github.com/datosgobar/portal-andino), en función de que el mismo pueda asi cumplir con estándares de calidad para la confección de metadata para catálogos de datos [DCAT](https://www.w3.org/TR/vocab-dcat) propuestos por la World Wide Web Consortium([W3C](www.w3c.es)). 
+Este desarrollo es un fork del trabajo realizado por la [GSA](https://github.com/GSA), con la extensión para CKAN, [GSA/ckanext-datajson](https://github.com/GSA/ckanext-datajson)
 
-Extencion de CKAN forkeada de [GSA/ckanext-datajson](https://github.com/GSA/ckanext-datajson)
 
-Link a la [Documentacion](https://github.com/GSA/ckanext-datajson/blob/master/README.md) original(EN)
++ [Instalacion de la Extensión](#instalacion-de-la-extensión)
+    + [Pre requisitos](#pre-requisitos)
 
-TOC:
-===
-
-Instalacion:
-===========
-dependencias:
-Depende de:
+##### Instalación de la Extensión:
+###### Pre requisitos:
 + Python 2.7.x 
 + CKAN 2.5.2
 + ckanext [gobAR-Theme](https://github.com/gobabiertoAR/distribuible.datos.gob.ar)
 + ckanext [Hierarchy](https://github.com/datagovuk/ckanext-hierarchy)
-+ ckanext [Harvest](link_a_harvest)
++ ckanext [Harvest](https://github.com/ckan/ckanext-harvestt)
 
-
-	# Dentro del virtualenv de CKAN
-	# . ruta/al/ckan_pyenv/bin/activate
-	(ckan_pyenv) $ pip install pyyaml lepl jsonschema rfc3987
-	(ckan_pyenv) $ pip install -e git+https://github.com/datosgobar/ckanext-datajson.git#egg=ckanext-datajson
-
-Luego, dentro de su archivo de configuracion de CKAN, normalmente alojado en `/etc/ckan/default/config_name.ini`, agregar la sigiente linea en la seccion de `[plugins]` a `ckan.plugins`
+##### Proceso de instalación de la extensión datajsonAR
+```bash
+# Dentro del virtualenv de CKAN
+# . ruta/al/ckan_pyenv/bin/activate
+(ckan_pyenv) $ pip install pyyaml lepl jsonschema rfc3987
+(ckan_pyenv) $ pip install -e git+https://github.com/datosgobar/ckanext-datajson.git#egg=ckanext-datajson
+```
+Luego, dentro de su archivo de configuracion de CKAN, normalmente alojado en `/etc/ckan/default/config_name.ini`, agregar la siguiente linea en la sección de `[plugins]` a `ckan.plugins`
 
 	ckan.plugins = (otros plugins) datajson
 
-test de que esta todo OK
+##### Probado que todo funciona:
+Para saber que el proceso de instalación se realizo con exito, solo debemos tipear, en un navegador:
 	
 	http://{tu_host}/data.json
 
-Usage:
-=====
+Y deberíamos ver una respuesta similar a esta:
+```JSON
+{
+    "title": "Título del portal",
+    "desciption": "Descripcion del portal",
+    "superThemeTaxonomy": "http://datos.gob.ar/superThemeTaxonomy.json",
+    "publisher": {
+        "mbox": "email@decontacto.xxx",
+        "name": "Nombre de la persona o institución responsable de la instancia CKAN."
+},
+"themeTaxonomy": [],
+"dataset": []
+}
+```
+##### Usage:
 Customizacion....
 
 
-Tests:
-=====
+##### Tests:
 *WIP*
 
-Credits / Copy
-nos -> UK -> US
+##### Credits / Copying
+El presente desarrollo es un fork del trabajo de la [GSA](link), [GSA/ckanext-datajson](https://github.com/GSA/ckanext-datajson) y podes visitarlo [Aquí](https://github.com/GSA/ckanext-datajson/blob/master/README.md) (EN).
+##### Contacto:
+Este proyecto es en desarrollo, si viste algun `bug`, por favor, **creanos un issue**.
 
-
-Contacto:
-Este proyecto es en desarrollo, si viste algun bug, creanos un issue.
-
-Comentarios o preguntas?
-escribinos a datos@modernizacion.gob.ar
+##### Comentarios o preguntas?
+*Escribinos a `datos@modernizacion.gob.ar`* 
