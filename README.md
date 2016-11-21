@@ -3,12 +3,18 @@ ckanext-datajsonAR
 La extensión de CKAN `datajsonAR`, fue confeccionada dentro del marco del plan de `Datos Abiertos` de la República Argentina e incluida dentro del proyecto [portal andino](https://github.com/datosgobar/portal-andino), en función de que el mismo pueda asi cumplir con estándares de calidad para la confección de metadata para catálogos de datos [DCAT](https://www.w3.org/TR/vocab-dcat) propuestos por la World Wide Web Consortium([W3C](www.w3c.es)). 
 Este desarrollo es un fork del trabajo realizado por la [GSA](https://github.com/GSA), con la extensión para CKAN, [GSA/ckanext-datajson](https://github.com/GSA/ckanext-datajson)
 
-
+Indice:
+======
++ [Presentacion](#ckanext-datajsonar)
 + [Instalación](#instalacion-de-la-extensión)
     + [Pre requisitos](#pre-requisitos)
     + [Proceso de instalación de la extensión datajsonAR](#proceso-de-instalacion-de-la-extension-datajsonar)
     + [Probado que todo funciona](#probado-que-todo-funciona)
 + [Usage](#usage)
++ [Tests](#tests)
++ [Credits / Copying](#credits--copying)
++ [Contacto](#contacto)
++ [Comentarios / preguntas](#comentarios-o-preguntas)
 
 ##### Instalación de la Extensión:
 ###### Pre requisitos:
@@ -63,6 +69,7 @@ Customizacion....
 
 ##### Credits / Copying
 El presente desarrollo es un fork del trabajo de la [GSA](link), [GSA/ckanext-datajson](https://github.com/GSA/ckanext-datajson) y podes visitarlo [Aquí](https://github.com/GSA/ckanext-datajson/blob/master/README.md) (EN).
+
 ##### Contacto:
 Este proyecto es en desarrollo, si viste algun `bug`, por favor, **creanos un issue**.
 
