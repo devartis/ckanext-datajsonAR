@@ -58,7 +58,7 @@ Y deberíamos ver una respuesta similar a esta:
     "desciption": "Descripcion del portal",
     "superThemeTaxonomy": "http://datos.gob.ar/superThemeTaxonomy.json",
     "publisher": {
-        "mbox": "email@decontacto.xxx",
+        "mbox": "email@deContacto.xxx",
         "name": "Nombre de la persona o institución responsable de la instancia CKAN."
 },
 	"themeTaxonomy": [],
