@@ -16,7 +16,7 @@ Indice:
 + [Contacto](#contacto)
 + [Comentarios / preguntas](#comentarios-o-preguntas)
 
-##### Instalación de la Extensión:
+#### Instalación de la Extensión:
 ###### Pre requisitos:
 + Python 2.7.x 
 + CKAN 2.5.2
@@ -41,7 +41,7 @@ Luego, dentro de su archivo de configuracion de CKAN, normalmente alojado en `/e
 
 	ckan.plugins = (otros plugins) datajson
 
-##### Probado que todo funciona:
+#### Probado que todo funciona:
 Para saber que el proceso de instalación se realizo con exito, solo debemos tipear, en un navegador:
 	
 	http://{tu_host}/data.json
@@ -60,7 +60,7 @@ Y deberíamos ver una respuesta similar a esta:
 	"dataset": []
 }
 ```
-##### Usage:
+#### Usage:
 Configurar la url de salida para nuestro `/data.json`, debebos agregar las sigientes lineas dentro del archivo de configuracion de CKAN`[/etc/ckan/default/ckan-config.ini]`
 
 	ckanext.datajson.path = /data.json
@@ -72,14 +72,14 @@ Para habilitar o deshabilitar por configuracion la visibilidad del `/data.json`,
 	# True, se muestra http://{tu-host}/data.json
     ckanext.datajson.url_enabled = False 
 
-##### Tests:
+#### Tests:
 *WIP*
 
-##### Credits / Copying
+#### Credits / Copying
 El presente desarrollo es un fork del trabajo de la [GSA](link), [GSA/ckanext-datajson](https://github.com/GSA/ckanext-datajson) y podes visitarlo [Aquí](https://github.com/GSA/ckanext-datajson/blob/master/README.md) (EN).
 
-##### Contacto:
+#### Contacto:
 Este proyecto es en desarrollo, si viste algun `bug`, por favor, **creanos un issue**.
 
-##### Comentarios o preguntas?
+#### Comentarios o preguntas?
 Escribinos a `datos@modernizacion.gob.ar`
