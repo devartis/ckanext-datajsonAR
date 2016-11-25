@@ -66,7 +66,7 @@ class Package2Pod:
                               'label': theme['display_name']
                               })
         catalog_headers = [("title", site_title),
-                           ("desciption", site_description),
+                           ("description", site_description),
                            ("superThemeTaxonomy", superThemeTaxonomy),
                            ("publisher", {"name": ckan_owner,
                                           "mbox": mbox}),
