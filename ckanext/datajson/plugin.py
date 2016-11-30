@@ -187,7 +187,6 @@ class DataJsonController(BaseController):
             tags = []
             themes = []
             import re
-
             for i in range(0, len(packages)):
                 j = 0
                 for extra in packages[i]['extras']:
@@ -202,7 +201,7 @@ class DataJsonController(BaseController):
                         packages[i]['resources'][j]['attributesDescription'] = fixed_attrDesc
                         accessURL = packages[i]['resources'][j]['url']
                         accessURL = accessURL.split('download')[0].replace('/resource/', '/archivo/')
-                        packages[i]['resources'][j].update({'accessURL': accessURL})
+                        packages[i]['resources'][j].update({'accessURL': accessURL[:-1]})
                 except KeyError:
                     pass
                 ckan_host = ''
@@ -217,6 +216,14 @@ class DataJsonController(BaseController):
                         themes.append(theme['title'])
                 except KeyError:
                     pass
+                try:
+                    packages[i]['author'] = {
+                        'name': packages[i]['author'],
+                        'mbox': packages[i]['author_email']
+                    }
+                except KeyError:
+                    pass
+
                 try:
                     for tag in packages[i]['tags']:
                         tags.append(tag['display_name'])
