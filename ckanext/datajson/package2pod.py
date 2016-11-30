@@ -43,16 +43,14 @@ class Package2Pod:
         from os import path, environ
         from ConfigParser import ConfigParser
         ckan_owner = ''
-        ckan_owner_email = ''
         if 'CKAN_CONFIG' in environ:
             if path.exists(environ['CKAN_CONFIG']):
                 tmp_ckan_config = ConfigParser()
                 tmp_ckan_config.read(environ['CKAN_CONFIG'])
                 try:
                     ckan_owner = tmp_ckan_config.get('app:main', 'ckan.owner')
-                    print ckan_owner
-                except Exception, e:
-                    print e
+                except Exception:
+                    pass
                 try:
                     tmp_mbox = tmp_ckan_config.get('app:main', 'ckan.owner.email')
                     if len(tmp_mbox) > 0:
