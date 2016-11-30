@@ -481,7 +481,7 @@ class Wrappers:
                 res_url = res_url.replace('http://[[REDACTED', '[[REDACTED')
                 res_url = res_url.replace('http://http', 'http')
                 if r.get('resource_type') in ['api', 'accessurl']:
-                    resource['accessURL'] = res_url
+                    # resource['accessURL'] = res_url
                     if 'mediaType' in resource:
                         resource.pop('mediaType')
                 else:
