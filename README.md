@@ -55,7 +55,7 @@ Y deberíamos ver una respuesta similar a esta:
 ```JSON
 {
     "title": "Título del portal",
-    "desciption": "Descripcion del portal",
+    "description": "Descripcion del portal",
     "superThemeTaxonomy": "http://datos.gob.ar/superThemeTaxonomy.json",
     "publisher": {
         "mbox": "email@deContacto.xxx",
