@@ -199,6 +199,10 @@ class DataJsonController(BaseController):
                     for j in range(0, len(packages[i]['resources'])):
                         fixed_attrDesc = json.loads(packages[i]['resources'][j]['attributesDescription'])
                         packages[i]['resources'][j]['attributesDescription'] = fixed_attrDesc
+                except KeyError:
+                    pass
+                try:
+                    for j in range(0, len(packages[i]['resources'])):
                         accessURL = packages[i]['resources'][j]['url']
                         accessURL = accessURL.split('download')[0].replace('/resource/', '/archivo/')
                         packages[i]['resources'][j].update({'accessURL': accessURL[:-1]})
