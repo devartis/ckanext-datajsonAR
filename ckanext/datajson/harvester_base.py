@@ -532,7 +532,7 @@ class DatasetHarvesterBase(HarvesterBase):
             "spatial": "extras__spatial",
             "temporal": "extras__temporal",
             "theme": "tags",
-            "superTheme": "groups",
+            "superTheme": "tags",
             "primaryITInvestmentUII": "extras__primaryITInvestmentUII",
             "accrualPeriodicity": "extras__accrualPeriodicity",
             "landingPage": "url",

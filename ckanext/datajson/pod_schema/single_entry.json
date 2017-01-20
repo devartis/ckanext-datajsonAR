@@ -248,6 +248,9 @@
           }
         },
         {
+          "type": "string"
+        },
+        {
           "type": "null"
         }
       ]

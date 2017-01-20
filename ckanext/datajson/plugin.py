@@ -176,7 +176,7 @@ class DataJsonController(BaseController):
                 j = 0
                 for extra in packages[i]['extras']:
                     if extra['key'] == 'language':
-                        if "{" in extra['value'] and "}" in extra['value']:
+                        if "{" in extra['value'] and "}" in extra['value'] or len(extra['value']) == 3:
                             extra['value'] = "[\"{0}\"]".format(extra['value'].replace('{', '').replace('}', ''))
                         packages[i]['extras'][j]['value'] = json.loads(extra['value'])
                         # packages[i]['extras'][j]['value'] = json.loads(extra['value'])
