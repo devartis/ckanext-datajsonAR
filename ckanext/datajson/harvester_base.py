@@ -132,8 +132,8 @@ class DatasetHarvesterBase(HarvesterBase):
         for dataset in source_datasets:
             try:
                 del dataset['@type']
-            except IndexError:
-                continue
+            except Exception:
+                pass
             try:
                 dataset.update({'author_email': dataset['publisher']['mbox']})
                 dataset.update({'author': dataset['publisher']['name']})
