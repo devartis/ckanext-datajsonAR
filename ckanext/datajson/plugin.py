@@ -135,22 +135,7 @@ class DataJsonController(BaseController):
         # output
         data = self.make_json(export_type='datajson', owner_org=org_id)
 
-        # if fmt == 'json-ld':
-        #     # Convert this to JSON-LD.
-        #     data = OrderedDict([
-        #         ("@context", OrderedDict([
-        #             ("rdfs", "http://www.w3.org/2000/01/rdf-schema#"),
-        #             ("dcterms", "http://purl.org/dc/terms/"),
-        #             ("dcat", "http://www.w3.org/ns/dcat#"),
-        #             ("foaf", "http://xmlns.com/foaf/0.1/"),
-        #         ])),
-        #         ("@id", DataJsonPlugin.ld_id),
-        #         ("@type", "dcat:Catalog"),
-        #         ("dcterms:title", DataJsonPlugin.ld_title),
-        #         ("rdfs:label", DataJsonPlugin.ld_title),
-        #         ("foaf:homepage", DataJsonPlugin.site_url),
-        #         ("dcat:dataset", [dataset_to_jsonld(d) for d in data.get('dataset')]),
-        #     ])
+
 
         return p.toolkit.literal(json.dumps(data, indent=2))
 
@@ -191,7 +176,10 @@ class DataJsonController(BaseController):
                 j = 0
                 for extra in packages[i]['extras']:
                     if extra['key'] == 'language':
+                        if "{" in extra['value'] and "}" in extra['value']:
+                            extra['value'] = "[\"{0}\"]".format(extra['value'].replace('{', '').replace('}', ''))
                         packages[i]['extras'][j]['value'] = json.loads(extra['value'])
+                        # packages[i]['extras'][j]['value'] = json.loads(extra['value'])
                     elif extra['key'] == 'globalGroups':
                         packages[i]['extras'][j]['value'] = json.loads(extra['value'])
                     j += 1
@@ -199,6 +187,10 @@ class DataJsonController(BaseController):
                     for j in range(0, len(packages[i]['resources'])):
                         fixed_attrDesc = json.loads(packages[i]['resources'][j]['attributesDescription'])
                         packages[i]['resources'][j]['attributesDescription'] = fixed_attrDesc
+                except KeyError:
+                    pass
+                try:
+                    for j in range(0, len(packages[i]['resources'])):
                         accessURL = packages[i]['resources'][j]['url']
                         accessURL = accessURL.split('download')[0].replace('/resource/', '/archivo/')
                         packages[i]['resources'][j].update({'accessURL': accessURL[:-1]})
@@ -232,44 +224,32 @@ class DataJsonController(BaseController):
                 # packages[i] = json.loads(packages[i][0]['extras']['language'])
                 packages[i]['groups'] = themes
                 packages[i]['tags'] = tags
-                if len(packages[i]['url']) < 1:
-                    packages[i]['url'] = '{host}/dataset/{dataset_id}'.format(
-                        host=ckan_host[:-1],
-                        dataset_id=packages[i]['name'])
+                try:
+                    if len(packages[i]['url']) < 1:
+                        packages[i]['url'] = '{host}/dataset/{dataset_id}'.format(
+                            host=ckan_host[:-1],
+                            dataset_id=packages[i]['name'])
+                except TypeError:
+                    prepare_url = 'unknow'
+                    try:
+                        prepare_url = packages[i]['resources'][0]['url']
+                        prepare_url = prepare_url.split('resource')[0]
+                    except IndexError:
+                        sys.stderr.write("[ckan.datajson] autogen \"landingpage\" fails.\n  ")
+                    packages[i].update({'url': prepare_url})
+
             json_export_map = get_export_map_json('export.map.json')
 
             if json_export_map:
                 for pkg in packages:
                     if json_export_map.get('debug'):
                         output.append(pkg)
-                    # logger.error('package: %s', json.dumps(pkg))
-                    # logger.debug("processing %s" % (pkg.get('title')))
+
                     extras = dict([(x['key'], x['value']) for x in pkg.get('extras', {})])
 
-                    # unredacted = all non-draft datasets (public + private)
-                    # redacted = public-only, non-draft datasets
                     if export_type in ['unredacted', 'redacted']:
                         if 'Draft' == extras.get('publishing_status'):
-                            # publisher = detect_publisher(extras)
-                            # logger.warn("Dataset id=[%s], title=[%s], organization=[%s] omitted (%s)\n",
-                            #             pkg.get('id'), pkg.get('title'), publisher,
-                            #             'publishing_status: Draft')
-                            # self._errors_json.append(OrderedDict([
-                            #     ('id', pkg.get('id')),
-                            #     ('name', pkg.get('name')),
-                            #     ('title', pkg.get('title')),
-                            #     ('errors', [(
-                            #         'publishing_status: Draft',
-                            #         [
-                            #             'publishing_status: Draft'
-                            #         ]
-                            #     )])
-                            # ]))
-
                             continue
-                            # if 'redacted' == export_type and re.match(r'[Nn]on-public', extras.get('public_access_level')):
-                            #     continue
-                    # draft = all draft-only datasets
                     elif 'draft' == export_type:
                         if 'publishing_status' not in extras.keys() or extras.get('publishing_status') != 'Draft':
                             continue
@@ -294,6 +274,12 @@ class DataJsonController(BaseController):
                         else:
                             logger.warn("Dataset id=[%s], title=[%s], organization=[%s] omitted, reason above.\n",
                                         pkg.get('id', None), pkg.get('title', None), publisher)
+                try:
+                    # CLEAN Not requiered fields
+                    for d in output:
+                        del d["@type"]
+                except Exception:
+                    pass
 
                 data = Package2Pod.wrap_json_catalog(output, json_export_map)
         except Exception as e:

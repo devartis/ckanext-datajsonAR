@@ -13,11 +13,6 @@
       "modified": {
         "field": "metadata_modified"
       },
-      "accessLevel": {
-        "extra": true,
-        "field": "Access Level",
-        "default": "public"
-      },
       "identifier": {
         "field": "id"
       },
@@ -66,19 +61,7 @@
         "field": "author"
       },
 
-      "contactPoint": {
-        "wrapper": "build_contact_point",
-        "map": {
-          "fn": {
-            "extra": true,
-            "field": "Responsible Party"
-          },
-          "hasEmail": {
-            "extra": true,
-            "field": "Contact Email"
-          }
-        }
-      },
+
       "distribution": {
         "wrapper": "generate_distribution",
         "map": {
@@ -128,19 +111,7 @@
       "keyword": {
         "field": "tags"
       },
-      "bureauCode": {
-        "type": "array",
-        "extra": true,
-        "field": "Bureau Code",
-        "split": ",",
-        "wrapper": "bureau_code"
-      },
-      "programCode": {
-        "type": "array",
-        "extra": true,
-        "field": "Program Code",
-        "split": ","
-      },
+
       "superTheme": {
         "extra": true,
         "field": "globalGroups",

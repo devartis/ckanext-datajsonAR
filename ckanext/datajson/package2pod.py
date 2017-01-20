@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 try:
     from collections import OrderedDict  # 2.7
 except ImportError:
@@ -16,14 +19,20 @@ class Package2Pod:
 
     seen_identifiers = None
 
-
     @staticmethod
     def wrap_json_catalog(dataset_dict, json_export_map):
-
+        andino_platform = True
         import ckanext.gobar_theme.helpers as gobar_helpers
-        site_title = gobar_helpers.get_theme_config("title.site-title", "")
-        mbox = gobar_helpers.get_theme_config("social.mail", "")
-        site_description = gobar_helpers.get_theme_config("title.site-description", "")
+        try:
+            site_title = gobar_helpers.get_theme_config("title.site-title", "")
+            mbox = gobar_helpers.get_theme_config("social.mail", "")
+            site_description = gobar_helpers.get_theme_config("title.site-description", "")
+        except AttributeError:
+            # Esto significa que no estoy corriendo dentro de Andino.
+            andino_platform = False
+            site_title = ""
+            mbox = ""
+            site_description = ""
         superThemeTaxonomy = "http://datos.gob.ar/superThemeTaxonomy.json"
         import ckan.logic as logic
         from ckan.common import c
@@ -57,6 +66,15 @@ class Package2Pod:
                         mbox = tmp_mbox
                 except Exception:
                     pass
+                if not andino_platform:
+                    try:
+                        site_title = tmp_ckan_config.get('app:main', 'ckan.site.title')
+                    except Exception:
+                        site_title = "No definido en \"config.ini\""
+                    try:
+                        site_description = tmp_ckan_config.get('app:main', 'ckan.site.description')
+                    except Exception:
+                        site_description = "No definido en \"config.ini\""
 
         for theme in logic.get_action('group_list')(context, data_dict_page_results):
             my_themes.append({'id': theme['name'],
@@ -136,7 +154,7 @@ class Package2Pod:
 
         try:
             dataset = OrderedDict([("@type", "dcat:Dataset")])
-
+            #del dataset['@type']
             Wrappers.pkg = package
             Wrappers.full_field_map = json_fields
 
@@ -198,6 +216,13 @@ class Package2Pod:
             # CKAN doesn't like empty values on harvest, let's get rid of them
             # Remove entries where value is None, "", or empty list []
             dataset = OrderedDict([(x, y) for x, y in dataset.iteritems() if y is not None and y != "" and y != []])
+            try:
+                del dataset['@type']
+                for dist in dataset['distribution']:
+                    sys.stderr.write('{0}\n'.format(dist))
+                    del dist['@type']
+            except KeyError:
+                pass
 
             return dataset
         except Exception as e:
@@ -414,6 +439,7 @@ class Wrappers:
                 email = Package2Pod.filter(email)
 
             contact_point = OrderedDict([('@type', 'vcard:Contact')])
+            # Modify here!
             if fn:
                 contact_point['fn'] = fn
             if email:
@@ -481,7 +507,7 @@ class Wrappers:
                 res_url = res_url.replace('http://[[REDACTED', '[[REDACTED')
                 res_url = res_url.replace('http://http', 'http')
                 if r.get('resource_type') in ['api', 'accessurl']:
-                    resource['accessURL'] = res_url.split('download')[0].replace('/resource/', '/archivo/')
+                    pass  # resource['accessURL'] = res_url
                     if 'mediaType' in resource:
                         resource.pop('mediaType')
                 else:
