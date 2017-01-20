@@ -11,7 +11,6 @@ from ckan.lib.munge import munge_title_to_name
 from ckan.lib.search.index import PackageSearchIndex
 from ckan.lib.navl.dictization_functions import Invalid
 from ckan.lib.navl.validators import ignore_empty
-from pprint import pprint
 
 from ckanext.harvest.model import HarvestJob, HarvestObject, HarvestGatherError, \
     HarvestObjectError, HarvestObjectExtra

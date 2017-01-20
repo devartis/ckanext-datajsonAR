@@ -219,10 +219,9 @@ class Package2Pod:
             try:
                 del dataset['@type']
                 for dist in dataset['distribution']:
-                    sys.stderr.write('{0}\n'.format(dist))
                     del dist['@type']
             except KeyError:
-                pass
+                log.info("Contenido de distribution: %s", unicode(dist))
 
             return dataset
         except Exception as e:
