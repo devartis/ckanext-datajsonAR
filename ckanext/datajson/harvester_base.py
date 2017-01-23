@@ -136,11 +136,29 @@ class DatasetHarvesterBase(HarvesterBase):
                 pass
             try:
                 dataset.update({'author_email': dataset['publisher']['mbox']})
-                dataset.update({'author': dataset['publisher']['name']})
-                del dataset['publisher']
             except IndexError:
-                # No posee la KEY publisher, continuo.
-                continue
+                log.warn('El campo \"publisher\" para \"{0}\" no contine campo \"mbox\".'.format(dataset['title']))
+                dataset.update({'author_mail': "unknow"})
+            except Exception:
+                log.warn('El fallo el campo \"publisher\" para \"{0}\". Este error es critico, '
+                         'se completara el campo \"mbox\". para evitar errores futuros.'.format(dataset['title']))
+                dataset.update({'author_email': "unknow"})
+
+            try:
+                dataset.update({'author': dataset['publisher']['name']})
+            except IndexError:
+                log.warn('El campo \"publisher\" para \"{0}\" no contine campo \"name\".'.format(dataset['title']))
+                dataset.update({'author': "unknow"})
+            except Exception:
+                log.warn('El fallo el campo \"publisher\" para \"{0}\". Este error es critico, '
+                         'se completara el campo \"name\". para evitar errores futuros.'.format(dataset['title']))
+                dataset.update({'author': "unknow"})
+
+            try:
+                del dataset['publisher']
+            except Exception:
+                pass
+
             try:
                 dataset.update({'maintainer_email': dataset['contactPoint']['hasEmail']})
                 dataset.update({'maintainer': dataset['contactPoint']['fn']})
@@ -148,7 +166,7 @@ class DatasetHarvesterBase(HarvesterBase):
             except Exception:
                 dataset.update({'maintainer_email': ""})
                 dataset.update({'maintainer': ""})
-                continue
+                del dataset['contactPoint']
 
         DATAJSON_SCHEMA = source_datasets
         # DATAJSON_SCHEMA = json.loads(DATAJSON_SCHEMA)
