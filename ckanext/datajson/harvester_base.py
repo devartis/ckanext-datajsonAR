@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-from ckan.lib.base import c
 from ckan import model
 from ckan import plugins as p
 from ckan.model import Session, Package
@@ -11,6 +10,7 @@ from ckan.lib.munge import munge_title_to_name
 from ckan.lib.search.index import PackageSearchIndex
 from ckan.lib.navl.dictization_functions import Invalid
 from ckan.lib.navl.validators import ignore_empty
+from ckan.controllers.package import get_action
 
 from ckanext.harvest.model import HarvestJob, HarvestObject, HarvestGatherError, \
     HarvestObjectError, HarvestObjectExtra
@@ -128,11 +128,61 @@ class DatasetHarvesterBase(HarvesterBase):
         except ValueError as e:
             self._save_gather_error("Error loading json content: %s." % (e), harvest_job)
             return []
+        superTheme = ["agri",
+                      "educ",
+                      "econ",
+                      "ener",
+                      "envi",
+                      "gove",
+                      "heal",
+                      "intr",
+                      "just",
+                      "regi",
+                      "soci",
+                      "tech",
+                      "tran"]
+        """
+
+        """
 
         for dataset in source_datasets:
             try:
                 del dataset['@type']
             except Exception:
+                pass
+
+            try:
+
+                tmp_group = {}
+                temp_stheme = []
+                for gname in dataset['superTheme']:
+                    if gname.lower() in superTheme:
+                        #  dataset['superTheme'] = {'name': gname.lower()}
+                        tmp_group['name'] = superTheme[gname.lower()]
+                        temp_stheme.append(tmp_group)
+                        print gname
+                dataset['superTheme'] = temp_stheme
+                dataset['theme'] = temp_stheme
+                dataset.update({'superTheme': temp_stheme})
+                dataset.update({'groups': temp_stheme})
+            except Exception:
+                pass
+
+            try:
+                foo = dataset['theme']
+                log.info('Theme exists and it value is:{0}.'.format(foo))
+            except IndexError:
+                log.warn('The field \"theme\" not exists!... Fill it MF!')
+                dataset.update({'theme': []})
+            try:
+                tags = dataset['keyword']
+                themes = dataset['theme']
+                if len(themes) > 0:
+                    if type(tags) is list:
+                        dataset['keyword'] = tags + themes
+                    else:
+                        dataset['keyword'] = [tags] + themes
+            except IndexError:
                 pass
             try:
                 dataset.update({'author_email': dataset['publisher']['mbox']})
@@ -153,7 +203,6 @@ class DatasetHarvesterBase(HarvesterBase):
                 log.warn('El fallo el campo \"publisher\" para \"{0}\". Este error es critico, '
                          'se completara el campo \"name\". para evitar errores futuros.'.format(dataset['title']))
                 dataset.update({'author': "unknow"})
-
             try:
                 del dataset['publisher']
             except Exception:
@@ -169,15 +218,11 @@ class DatasetHarvesterBase(HarvesterBase):
                 del dataset['contactPoint']
 
         DATAJSON_SCHEMA = source_datasets
-        # DATAJSON_SCHEMA = json.loads(DATAJSON_SCHEMA)
-        # schema version is default 1.0, or a valid one (1.1, ...)
         schema_version = '1.2'
         parent_identifiers = set()
         child_identifiers = set()
         catalog_extras = {}
         if isinstance(catalog_values, dict):
-            #  schema_value = catalog_values.get('conformsTo', '')
-            schema_value = catalog_values.get('conformsTo', '')
             schema_version = '1.2'
             for dataset in source_datasets:
                 parent_identifier = dataset.get('isPartOf')
@@ -488,20 +533,19 @@ class DatasetHarvesterBase(HarvesterBase):
 
         MAPPING = {
             "title": "title",
-            "identifier": "id",
+            "identifier": "extras__identifier",
             "description": "notes",
             "keyword": "tags",
-            "modified": "metadata_modified",
-            "publisher": "extras__publisher",
-            "contactPoint": {
-                "fn": "author_email",
-                "hasEmail": "author"
-            },
+            "modified": "modified",
+            "author": "author",
+            "author_email": "author_email",
+            "maintainer": "maintainer",
+            "maintainer_email": "maintainer_email",
             "dataQuality": "extras__dataQuality",
             "license": "license_title",
             "spatial": "extras__spatial",
             "temporal": "extras__temporal",
-            "theme": "groups",
+            "superTheme": "groups",
             "primaryITInvestmentUII": "extras__primaryITInvestmentUII",
             "accrualPeriodicity": "extras__accrualPeriodicity",
             "landingPage": "url",
@@ -513,20 +557,19 @@ class DatasetHarvesterBase(HarvesterBase):
 
         MAPPING_V1_1 = {
             "title": "title",
-            "identifier": "id",
+            "identifier": "extras__identifier",
             "description": "notes",
             "keyword": "tags",
-            "modified": "metadata_modified",
-            "publisher": "extras__publisher",
-            "contactPoint": {
-                "fn": "author_email",
-                "hasEmail": "author"
-            },
+            "modified": "modified",
+            "author": "author",
+            "author_email": "author_email",
+            "maintainer": "maintainer",
+            "maintainer_email": "maintainer_email",
             "dataQuality": "extras__dataQuality",
             "license": "license_title",
             "spatial": "extras__spatial",
             "temporal": "extras__temporal",
-            "theme": "tags",
+            "superTheme": "groups",
             "primaryITInvestmentUII": "extras__primaryITInvestmentUII",
             "accrualPeriodicity": "extras__accrualPeriodicity",
             "landingPage": "url",
@@ -549,8 +592,7 @@ class DatasetHarvesterBase(HarvesterBase):
             "license": "license_title",
             "spatial": "extras__spatial",
             "temporal": "extras__temporal",
-            "theme": "tags",
-            "superTheme": "tags",
+            "superTheme": "groups",
             "primaryITInvestmentUII": "extras__primaryITInvestmentUII",
             "accrualPeriodicity": "extras__accrualPeriodicity",
             "landingPage": "url",
@@ -615,14 +657,15 @@ class DatasetHarvesterBase(HarvesterBase):
             owner_org = source_dataset.owner_org
 
         source_config = json.loads(harvest_object.source.config or '{}')
-        group_name = source_config.get('default_groups', '')
+        # group_name = source_config.get('default_groups', '')
+        group_name = [{'name': theme.lower()} for theme in dataset['superTheme']]
 
         # Assemble basic information about the dataset.
 
         pkg = {
             "state": "active",  # in case was previously deleted
             "owner_org": owner_org,
-            "groups": [{"name": group_name}],
+            "groups": group_name,
             "resources": [],
             "extras": [
                 {
