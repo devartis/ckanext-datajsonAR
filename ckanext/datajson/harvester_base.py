@@ -4,6 +4,7 @@
 
 from ckan import model
 from ckan import plugins as p
+import requests
 from ckan.model import Session, Package
 from ckan.logic import ValidationError, NotFound, get_action
 from ckan.lib.munge import munge_title_to_name
@@ -11,18 +12,15 @@ from ckan.lib.search.index import PackageSearchIndex
 from ckan.lib.navl.dictization_functions import Invalid
 from ckan.lib.navl.validators import ignore_empty
 from ckan.controllers.package import get_action
-
+from os import path, environ
+from ConfigParser import ConfigParser
 from ckanext.harvest.model import HarvestJob, HarvestObject, HarvestGatherError, \
     HarvestObjectError, HarvestObjectExtra
 from ckanext.harvest.harvesters.base import HarvesterBase
-
 import uuid, datetime, hashlib, urllib2, json, yaml, json, os
-
 from jsonschema.validators import Draft4Validator
 from jsonschema import FormatChecker
-
 from sqlalchemy.exc import IntegrityError
-
 import logging
 
 log = logging.getLogger("harvester")
@@ -128,45 +126,66 @@ class DatasetHarvesterBase(HarvesterBase):
         except ValueError as e:
             self._save_gather_error("Error loading json content: %s." % (e), harvest_job)
             return []
-        superTheme = ["agri",
-                      "educ",
-                      "econ",
-                      "ener",
-                      "envi",
-                      "gove",
-                      "heal",
-                      "intr",
-                      "just",
-                      "regi",
-                      "soci",
-                      "tech",
-                      "tran"]
-        """
-
-        """
-
+        tmp_superThemes = ["agri", "educ", "econ", "ener",
+                           "envi", "gove", "heal", "intr",
+                           "just", "regi", "soci", "tech",
+                           "tran"]
+        ckan_host = ''
+        # Call to config.ini to load superTheme list
+        if 'CKAN_CONFIG' in environ:
+            if path.exists(environ['CKAN_CONFIG']):
+                try:
+                    tmp_ckan_config = ConfigParser()
+                    tmp_ckan_config.read(environ['CKAN_CONFIG'])
+                except IOError:
+                    log.warn('Error loading CKAN config.ini file [%s]. '
+                             'Loading default SuperThemes', environ['CKAN_CONFIG'])
+                except Exception:
+                    log.warn('Unknow error loading CKAN config.ini file [%s]. '
+                             'Loading default SuperThemes', environ['CKAN_CONFIG'])
+                try:
+                    ckan_host = tmp_ckan_config.get('app:main', 'ckan.site_url')
+                except Exception:
+                    log.warn('Error loading \"ckan.site_url\" from CKAN config.ini file [%s]. '
+                             'Loading default SuperThemes', environ['CKAN_CONFIG'])
+                # Get superThemeTaxonomy
+                try:
+                    if len(ckan_host) > 0:
+                        stt_url = '{site_url}/superThemeTaxonomy.json'.format(site_url=ckan_host)
+                        superThemeTaxonomy = requests.get(stt_url)
+                        superThemeTaxonomy = superThemeTaxonomy.json()
+                        if len(superThemeTaxonomy) < 0:
+                            raise Exception('SuperThemeTaxonomy JSON in empty')
+                        if 'id' not in [theme for theme in superThemeTaxonomy]:
+                            raise Exception('SuperThemeTaxonomy JSON don\'t contains \"id\" field')
+                        tmp_superThemes = [theme['id'] for theme in superThemeTaxonomy]
+                        log.info("superThemeTaxonomy loaded!")
+                    else:
+                        raise Exception('The field of config.ini \"site_url\" is empty.')
+                except Exception, e:
+                    log.warn("Error getting \"ThemeTaxonomy.json\", err: %s.", e)
+        superTheme = tmp_superThemes
         for dataset in source_datasets:
+            # Delete if exists @type key
             try:
                 del dataset['@type']
             except Exception:
                 pass
 
-            try:
-
-                tmp_group = {}
-                temp_stheme = []
-                for gname in dataset['superTheme']:
-                    if gname.lower() in superTheme:
-                        #  dataset['superTheme'] = {'name': gname.lower()}
-                        tmp_group['name'] = superTheme[gname.lower()]
-                        temp_stheme.append(tmp_group)
-                        print gname
-                dataset['superTheme'] = temp_stheme
-                dataset['theme'] = temp_stheme
-                dataset.update({'superTheme': temp_stheme})
-                dataset.update({'groups': temp_stheme})
-            except Exception:
-                pass
+            #  try:
+            #      tmp_group = {}
+            #      temp_stheme = []
+            #      for gname in dataset['superTheme']:
+            #          if gname.lower() in superTheme:
+            #              tmp_group['name'] = superTheme[gname.lower()]
+            #              temp_stheme.append(tmp_group)
+            #              print gname
+            #      dataset['superTheme'] = temp_stheme
+            #      dataset['theme'] = temp_stheme
+            #      dataset.update({'superTheme': temp_stheme})
+            #      dataset.update({'groups': temp_stheme})
+            #  except Exception:
+            #      pass
 
             try:
                 foo = dataset['theme']
