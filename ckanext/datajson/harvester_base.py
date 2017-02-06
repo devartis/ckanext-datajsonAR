@@ -613,7 +613,7 @@ class DatasetHarvesterBase(HarvesterBase):
             "temporal": "extras__temporal",
             "superTheme": "groups",
             "primaryITInvestmentUII": "extras__primaryITInvestmentUII",
-            "accrualPeriodicity": "extras__accrualPeriodicity",
+            "accrualPeriodicity": "extras__updateFrequency",
             "landingPage": "url",
             "language": "extras__language",
             "references": "extras__references",
