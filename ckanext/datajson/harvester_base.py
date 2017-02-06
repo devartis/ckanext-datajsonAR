@@ -2,26 +2,30 @@
 # -*- coding: utf-8 -*-
 
 
+import hashlib
+import json
+import logging
+import os
+import uuid
+import yaml
+from ConfigParser import ConfigParser
+from os import path, environ
+
+import requests
 from ckan import model
 from ckan import plugins as p
-import requests
-from ckan.model import Session, Package
-from ckan.logic import ValidationError, NotFound, get_action
+from ckan.controllers.package import get_action
 from ckan.lib.munge import munge_title_to_name
-from ckan.lib.search.index import PackageSearchIndex
 from ckan.lib.navl.dictization_functions import Invalid
 from ckan.lib.navl.validators import ignore_empty
-from ckan.controllers.package import get_action
-from os import path, environ
-from ConfigParser import ConfigParser
-from ckanext.harvest.model import HarvestJob, HarvestObject, HarvestGatherError, \
-    HarvestObjectError, HarvestObjectExtra
+from ckan.lib.search.index import PackageSearchIndex
+from ckan.logic import NotFound, get_action
+from ckan.model import Session, Package
 from ckanext.harvest.harvesters.base import HarvesterBase
-import uuid, datetime, hashlib, urllib2, json, yaml, json, os
-from jsonschema.validators import Draft4Validator
+from ckanext.harvest.model import HarvestObject, HarvestObjectExtra
 from jsonschema import FormatChecker
+from jsonschema.validators import Draft4Validator
 from sqlalchemy.exc import IntegrityError
-import logging
 
 log = logging.getLogger("harvester")
 
@@ -38,19 +42,10 @@ def validate_schema(schema):
 
 
 class DatasetHarvesterBase(HarvesterBase):
-    '''
+    """
     A Harvester for datasets.
-    '''
+    """
     _user_name = None
-
-    # SUBCLASSES MUST IMPLEMENT
-    # HARVESTER_VERSION = "1.0"
-    # def info(self):
-    #    return {
-    #        'name': 'harvester_base',
-    #        'title': 'Base Harvester',
-    #        'description': 'Abstract base class for harvesters that pull in datasets.',
-    #    }
 
     def validate_config(self, config):
         if not config:
@@ -67,7 +62,6 @@ class DatasetHarvesterBase(HarvesterBase):
         ret = {
             "filters": {},  # map data.json field name to list of values one of which must be present
             "defaults": {},
-        # map field name to value to supply as default if none exists, handled by the actual importer module, so the field names may be arbitrary
         }
 
         source_config = yaml.load(harvest_source.config)
@@ -96,18 +90,10 @@ class DatasetHarvesterBase(HarvesterBase):
         return self._user_name
 
     def context(self):
-        # Reusing the dict across calls to action methods can be dangerous, so
-        # create a new dict every time we need it.
-        # Setting validate to False is critical for getting the harvester plugin
-        # to set extra fields on the package during indexing (see ckanext/harvest/plugin.py
-        # line 99, https://github.com/okfn/ckanext-harvest/blob/master/ckanext/harvest/plugin.py#L99).
         return {"user": self._get_user_name(), "ignore_auth": True}
 
     # SUBCLASSES MUST IMPLEMENT
     def load_remote_catalog(self, harvest_job):
-        # Loads a remote data catalog. This function must return a JSON-able
-        # list of dicts, each dict a dataset containing an 'identifier' field
-        # with a locally unique identifier string and a 'title' field.
         raise Exception("Not implemented")
 
     def extra_schema(self):
@@ -116,11 +102,7 @@ class DatasetHarvesterBase(HarvesterBase):
         }
 
     def gather_stage(self, harvest_job):
-        # The gather stage scans a remote resource (like a /data.json file) for
-        # a list of datasets to import.
-
         log.debug('In %s gather_stage (%s)' % (repr(self), harvest_job.source.url))
-        # Start gathering.
         try:
             source_datasets, catalog_values = self.load_remote_catalog(harvest_job)
         except ValueError as e:
@@ -171,21 +153,6 @@ class DatasetHarvesterBase(HarvesterBase):
                 del dataset['@type']
             except Exception:
                 pass
-
-            #  try:
-            #      tmp_group = {}
-            #      temp_stheme = []
-            #      for gname in dataset['superTheme']:
-            #          if gname.lower() in superTheme:
-            #              tmp_group['name'] = superTheme[gname.lower()]
-            #              temp_stheme.append(tmp_group)
-            #              print gname
-            #      dataset['superTheme'] = temp_stheme
-            #      dataset['theme'] = temp_stheme
-            #      dataset.update({'superTheme': temp_stheme})
-            #      dataset.update({'groups': temp_stheme})
-            #  except Exception:
-            #      pass
 
             try:
                 foo = dataset['theme']
@@ -433,7 +400,7 @@ class DatasetHarvesterBase(HarvesterBase):
             if pkg.get("state") == "deleted": continue  # already deleted
             pkg["state"] = "deleted"
             log.warn('deleting package %s (%s) because it is no longer in %s' % (
-            pkg["name"], pkg["id"], harvest_job.source.url))
+                pkg["name"], pkg["id"], harvest_job.source.url))
             get_action('package_update')(self.context(), pkg)
             obj = HarvestObject(
                 guid=pkg_id,
