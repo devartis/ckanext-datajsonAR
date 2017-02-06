@@ -164,7 +164,7 @@ class DatasetHarvesterBase(HarvesterBase):
                         raise Exception('The field of config.ini \"site_url\" is empty.')
                 except Exception, e:
                     log.warn("Error getting \"ThemeTaxonomy.json\", err: %s.", e)
-        superTheme = tmp_superThemes
+        superThemes = tmp_superThemes
         for dataset in source_datasets:
             # Delete if exists @type key
             try:

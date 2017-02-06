@@ -58,7 +58,7 @@
       ]
     },
     "accrualperiodicity": {
-      "title": "Frequency",
+      "title": "updateFrequency",
       "description": "Frequency with which dataset is published.",
       "anyOf": [
         {
