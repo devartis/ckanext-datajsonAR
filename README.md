@@ -33,7 +33,7 @@ Instalación de la Extensión:
 # Dentro del virtualenv de CKAN
 # . ruta/al/ckan_pyenv/bin/activate
 (ckan_pyenv) $ pip install pyyaml lepl jsonschema rfc3987
-(ckan_pyenv) $ pip install -e git+https://github.com/datosgobar/ckanext-datajson.git#egg=ckanext-datajson
+(ckan_pyenv) $ pip install -e "git+https://github.com/datosgobar/ckanext-datajson.git#egg=ckanext-datajson"
 ```
 Dentro del apartado `[app:main]` de la configuracion de CKAN `(/etc/ckan/default/ckan_config.ini)` agregar los siguientes campos:
 ```bash
