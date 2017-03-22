@@ -201,13 +201,10 @@ class DataJsonController(BaseController):
                         packages[i]['resources'][0]['url']).group(0)
                 except Exception:
                     pass
-                try:
-                    themes = []
-                    for theme in packages[i]['groups']:
-                        themes.append(theme['title'])
-                    packages[i]['groups'] = themes
-                except KeyError:
-                    pass
+
+                themes = self.exception_handler_map(dict.get, packages[i]['groups'], 'title')
+                packages[i]['groups'] = themes
+
                 try:
                     packages[i]['author'] = {
                         'name': packages[i]['author'],
@@ -215,13 +212,9 @@ class DataJsonController(BaseController):
                     }
                 except KeyError:
                     pass
-                try:
-                    tags = []
-                    for tag in packages[i]['tags']:
-                        tags.append(tag['display_name'])
-                    packages[i]['tags'] = tags
-                except KeyError:
-                    pass
+
+                tags = self.exception_handler_map(dict.get, packages[i]['tags'], 'display_name')
+                packages[i]['tags'] = tags
 
                 # packages[i] = json.loads(packages[i][0]['extras']['language'])
                 try:
@@ -301,6 +294,18 @@ class DataJsonController(BaseController):
             return data
 
         return self.write_zip(data, error, errors_json, zip_name=export_type)
+
+    def exception_handler_map(self, function, list, *args):
+        array = []
+        for element in list:
+            try:
+                array.append(function(element, *args))
+            except:
+                pass
+        return self.remove_none(array)
+
+    def remove_none(self, array):
+        return [x for x in array if x is not None]
 
     def get_packages(self, owner_org, with_private=True):
         # Build the data.json file.
