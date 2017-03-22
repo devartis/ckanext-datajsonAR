@@ -169,8 +169,6 @@ class DataJsonController(BaseController):
                 # None, {'limit': 50, 'page': 300})
                 packages = DataJsonController._get_ckan_datasets()
                 # packages = p.toolkit.get_action("current_package_list_with_resources")(None, {})
-            tags = []
-            themes = []
             import re
             for i in range(0, len(packages)):
                 j = 0
@@ -204,8 +202,10 @@ class DataJsonController(BaseController):
                 except Exception:
                     pass
                 try:
+                    themes = []
                     for theme in packages[i]['groups']:
                         themes.append(theme['title'])
+                    packages[i]['groups'] = themes
                 except KeyError:
                     pass
                 try:
@@ -215,15 +215,15 @@ class DataJsonController(BaseController):
                     }
                 except KeyError:
                     pass
-
                 try:
+                    tags = []
                     for tag in packages[i]['tags']:
                         tags.append(tag['display_name'])
+                    packages[i]['tags'] = tags
                 except KeyError:
                     pass
+
                 # packages[i] = json.loads(packages[i][0]['extras']['language'])
-                packages[i]['groups'] = themes
-                packages[i]['tags'] = tags
                 try:
                     if len(packages[i]['url']) < 1:
                         packages[i]['url'] = '{host}/dataset/{dataset_id}'.format(
