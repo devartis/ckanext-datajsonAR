@@ -202,7 +202,7 @@ class DataJsonController(BaseController):
                 except Exception:
                     pass
 
-                themes = self.exception_handler_map(dict.get, packages[i]['groups'], 'title')
+                themes = self.safely_map(dict.get, packages[i]['groups'], 'title')
                 packages[i]['groups'] = themes
 
                 try:
@@ -213,7 +213,7 @@ class DataJsonController(BaseController):
                 except KeyError:
                     pass
 
-                tags = self.exception_handler_map(dict.get, packages[i]['tags'], 'display_name')
+                tags = self.safely_map(dict.get, packages[i]['tags'], 'display_name')
                 packages[i]['tags'] = tags
 
                 # packages[i] = json.loads(packages[i][0]['extras']['language'])
@@ -295,7 +295,7 @@ class DataJsonController(BaseController):
 
         return self.write_zip(data, error, errors_json, zip_name=export_type)
 
-    def exception_handler_map(self, function, list, *args):
+    def safely_map(self, function, list, *args):
         array = []
         for element in list:
             try:
