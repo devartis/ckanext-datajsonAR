@@ -302,9 +302,6 @@ class DataJsonController(BaseController):
                 array.append(function(element, *args))
             except:
                 pass
-        return self.remove_none(array)
-
-    def remove_none(self, array):
         return [x for x in array if x is not None]
 
     def get_packages(self, owner_org, with_private=True):
